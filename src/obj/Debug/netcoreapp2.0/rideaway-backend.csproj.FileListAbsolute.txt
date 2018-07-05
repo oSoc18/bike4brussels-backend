@@ -1,0 +1,11 @@
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/bin/Debug/netcoreapp2.0/rideaway-backend.deps.json
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/bin/Debug/netcoreapp2.0/rideaway-backend.runtimeconfig.json
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/bin/Debug/netcoreapp2.0/rideaway-backend.runtimeconfig.dev.json
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/bin/Debug/netcoreapp2.0/rideaway-backend.dll
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/bin/Debug/netcoreapp2.0/rideaway-backend.pdb
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/obj/Debug/netcoreapp2.0/rideaway-backend.csproj.CoreCompileInputs.cache
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/obj/Debug/netcoreapp2.0/rideaway-backend.AssemblyInfoInputs.cache
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/obj/Debug/netcoreapp2.0/rideaway-backend.AssemblyInfo.cs
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/obj/Debug/netcoreapp2.0/rideaway-backend.dll
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/obj/Debug/netcoreapp2.0/rideaway-backend.pdb
+/Users/jodideloof/Desktop/osoc/backend-bikeforbrussels/rideaway-backend/src/obj/Debug/netcoreapp2.0/rideaway-backend.csprojResolveAssemblyReference.cache
