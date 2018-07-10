@@ -7,14 +7,14 @@ southwest;zuidwest
 west;west
 northwest;noordwest
 left;links
-sharpleft;scherp links
-slightlyleft;schuin links
+sharpleft;scherplinks
+slightlyleft;schuinlinks
 right;rechts
-sharpright;scherp rechts
-slightlyright;schuin rechts
+sharpright;scherprechts
+slightlyright;schuinrechts
 straighton;rechtdoor
 Start {0}.;Start {0}.
-Arrived at destination.;U hebt u bestemming bereikt.
+Arrived at destination.;U hebt uw bestemming bereikt.
 Take the first exit at the next roundabout.;Neem de eerste afrit op het volgende rondpunt.
 Take the second exit at the next roundabout.;Neem de tweede afrit op het volgende rondpunt.
 Take the third exit at the next roundabout.;Neem de derde afrit op het volgende rondpunt.
