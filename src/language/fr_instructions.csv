@@ -1,0 +1,27 @@
+north,nord
+northeast,nord-est
+east,est
+southeast,sud-est
+south,sud
+southwest,sud-ouest
+west,ouest
+northwest,nord-ouest
+left,gauche
+sharpleft,serré à gauche
+slightlyleft,légèrement à gauche
+right,droite
+sharpright,serré à droite
+slightlyright,légèrement à droite
+straighton,tout droit
+Start {0}.,Début{0}.
+Arrived at destination.,Arrivé à destination.
+Take the first exit at the next roundabout.,Prenez la première sortie au rond-point suivant.
+Take the second exit at the next roundabout.,Prenez la deuxième sortie au rond-point suivant.
+Take the third exit at the next roundabout.,Prenez la troisième sortie au rond-point suivant.
+Go {0} on {1}.,Allez {0} par {1}.
+Go {0}.,Allez {0}.
+Go {0} on the {1} route.,Allez {0} par la {1} route.
+Go {0} and leave the cyclenetwork on {1}.,Allez {0} et sortez du réseau cyclable par {1}.
+Go {0} and leave the cyclenetwork.,Allez {0} et sortez du réseau cyclable.
+Go {0} and enter the cyclenetwork on the {1} route.,Allez {0} et entrez le réseau cyclable par la {1} route.
+Go {0} and enter the cyclenetwork.,Allez {0} et entrez le réseau cyclable.
