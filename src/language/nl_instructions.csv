@@ -1,27 +1,27 @@
-north;noord
-northeast;noordoost
-east;oost
-southeast;zuidoost
-south;zuid
-southwest;zuidwest
-west;west
-northwest;noordwest
-left;links
-sharpleft;scherplinks
-slightlyleft;schuinlinks
-right;rechts
-sharpright;scherprechts
-slightlyright;schuinrechts
-straighton;rechtdoor
-Start {0}.;Start {0}.
-Arrived at destination.;U hebt uw bestemming bereikt.
-Take the first exit at the next roundabout.;Neem de eerste afrit op het volgende rondpunt.
-Take the second exit at the next roundabout.;Neem de tweede afrit op het volgende rondpunt.
-Take the third exit at the next roundabout.;Neem de derde afrit op het volgende rondpunt.
-Go {0} on {1}.;Ga {0} op {1}.
-Go {0}.;Ga {0}.
-Go {0} on the {1} route.;Ga {0} op de {1} route.
-Go {0} and leave the cyclenetwork on {1}.;Ga {0} en verlaat het fietsnetwerk op {1}.
-Go {0} and leave the cyclenetwork.;Ga {0} en verlaat het fietsnetwerk.
-Go {0} and enter the cyclenetwork on the {1} route.;Ga {0} en ga op het fietsnetwerk op de {1} route.
-Go {0} and enter the cyclenetwork.;Ga {0} en ga het fietsnetwerk op.
+north,noord
+northeast,noordoost
+east,oost
+southeast,zuidoost
+south,zuid
+southwest,zuidwest
+west,west
+northwest,noordwest
+left,links
+sharpleft,scherplinks
+slightlyleft,schuinlinks
+right,rechts
+sharpright,scherprechts
+slightlyright,schuinrechts
+straighton,rechtdoor
+Start {0}.,Start {0}.
+Arrived at destination.,U hebt uw bestemming bereikt.
+Take the first exit at the next roundabout.,Neem de eerste afrit op het volgende rondpunt.
+Take the second exit at the next roundabout.,Neem de tweede afrit op het volgende rondpunt.
+Take the third exit at the next roundabout.,Neem de derde afrit op het volgende rondpunt.
+Go {0} on {1}.,Ga {0} op {1}.
+Go {0}.,Ga {0}.
+Go {0} on the {1} route.,Ga {0} op de {1} route.
+Go {0} and leave the cyclenetwork on {1}.,Ga {0} en verlaat het fietsnetwerk op {1}.
+Go {0} and leave the cyclenetwork.,Ga {0} en verlaat het fietsnetwerk.
+Go {0} and enter the cyclenetwork on the {1} route.,Ga {0} en ga op het fietsnetwerk op de {1} route.
+Go {0} and enter the cyclenetwork.,Ga {0} en ga het fietsnetwerk op.
