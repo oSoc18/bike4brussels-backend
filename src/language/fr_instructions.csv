@@ -7,21 +7,21 @@ southwest,sud-ouest
 west,ouest
 northwest,nord-ouest
 left,gauche
-sharpleft,serré à gauche
-slightlyleft,légèrement à gauche
+sharpleft,serr√© √† gauche
+slightlyleft,l√©g√®rement √† gauche
 right,droite
-sharpright,serré à droite
-slightlyright,légèrement à droite
+sharpright,serr√© √† droite
+slightlyright,l√©g√®rement √† droite
 straighton,tout droit
-Start {0}.,Début{0}.
-Arrived at destination.,Arrivé à destination.
-Take the first exit at the next roundabout.,Prenez la première sortie au rond-point suivant.
-Take the second exit at the next roundabout.,Prenez la deuxième sortie au rond-point suivant.
-Take the third exit at the next roundabout.,Prenez la troisième sortie au rond-point suivant.
+Start {0}.,D√©but{0}.
+Arrived at destination.,Arriv√© √† destination.
+Take the first exit at the next roundabout.,Prenez la premi√®re sortie au rond-point suivant.
+Take the second exit at the next roundabout.,Prenez la deuxi√®me sortie au rond-point suivant.
+Take the third exit at the next roundabout.,Prenez la troisi√®me sortie au rond-point suivant.
 Go {0} on {1}.,Allez {0} par {1}.
 Go {0}.,Allez {0}.
 Go {0} on the {1} route.,Allez {0} par la {1} route.
-Go {0} and leave the cyclenetwork on {1}.,Allez {0} et sortez du réseau cyclable par {1}.
-Go {0} and leave the cyclenetwork.,Allez {0} et sortez du réseau cyclable.
-Go {0} and enter the cyclenetwork on the {1} route.,Allez {0} et entrez le réseau cyclable par la {1} route.
-Go {0} and enter the cyclenetwork.,Allez {0} et entrez le réseau cyclable.
+Go {0} and leave the cyclenetwork on {1}.,Allez {0} et sortez du r√©seau cyclable par {1}.
+Go {0} and leave the cyclenetwork.,Allez {0} et sortez du r√©seau cyclable.
+Go {0} and enter the cyclenetwork on the {1} route.,Allez {0} et entrez le r√©seau cyclable par la {1} route.
+Go {0} and enter the cyclenetwork.,Allez {0} et entrez le r√©seau cyclable.
