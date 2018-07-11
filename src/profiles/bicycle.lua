@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 	Lua configuration file for the profiles used when routing, defines properties, 
 	preprocessing actions, routing behaviour and instruction generation.
 --]]
@@ -404,7 +404,7 @@ function get_turn (route_position, language_reference, instruction)
 	local ref = route_position.attributes.cycleref
 	local cyclenetwork = route_position.attributes.brussels
 	local next_cyclenetwork = nil
-	local next_ref;
+	local next_ref = nil
 	local next = route_position.next()
 	
 	if next then
@@ -430,6 +430,8 @@ function get_turn (route_position, language_reference, instruction)
 		
 		if next then
 			name = next.attributes.name
+		else
+			name = route_position.attributes.name
 		end
 		if cyclenetwork then 
 			if next_cyclenetwork then
@@ -464,10 +466,10 @@ function get_turn (route_position, language_reference, instruction)
 			else
 				if name then
 					instruction.text = itinero.format(language_reference.get("Go {0} on {1}."), 
-						language_reference.get(relative_direction), name)
+					language_reference.get(relative_direction), name)
 				else
 					instruction.text = itinero.format(language_reference.get("Go {0}."), 
-						language_reference.get(relative_direction))
+					language_reference.get(relative_direction))
 				end
 			end
 		end
