@@ -19,7 +19,7 @@ namespace rideaway_backend.Extensions {
                 if (currentShape == currentInstruction.Shape) {
 
                     instructionIndex++;
-                    if (instructionIndex < instructions.Count) {
+                    if (instructionIndex < instructions.Count - 1) {
                         currentInstruction = instructions[instructionIndex];
                     }
                 }
