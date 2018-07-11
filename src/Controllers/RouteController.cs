@@ -26,7 +26,7 @@ namespace rideaway_backend.Controllers {
         /// <returns>JSON result with geoJSON featurecollection representing the route.</returns>
         [HttpGet]
         [EnableCors ("AllowAnyOrigin")]
-        public ActionResult Get (string loc1, string loc2, string profile = "brussels", bool instructions = true, string lang = "en") {
+        public ActionResult Get (string loc1, string loc2, string profile = "", bool instructions = true, string lang = "en") {
             try {
                 Coordinate from = Utility.ParseCoordinate (loc1);
                 Coordinate to = Utility.ParseCoordinate (loc2);
