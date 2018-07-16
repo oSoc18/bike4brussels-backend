@@ -11,7 +11,6 @@ namespace rideaway_backend.Model {
     /// </summary>
     public class RouteResponse {
         private Route RouteObj;
-        private IList<Instruction> rawInstructions;
 
         public JObject Route { get; set; }
 
@@ -21,25 +20,10 @@ namespace rideaway_backend.Model {
         /// Constructor of a RouteResponse
         /// </summary>
         /// <param name="RouteObj">The route object.</param>
-        /// <param name="colourCorrection">Indicates if the colours need to be corrected.</param>
-        /// <param name="instructions">Indicates if instructions need to be generated.</param>
-        /// <param name="language">The language of the instructions.</param>
-        public RouteResponse (Route RouteObj, bool colourCorrection, bool instructions, string language = "en") {
+        /// <param name="Instructions">The instructions that go with this route.</param>
+        public RouteResponse (Route RouteObj, GeoJsonFeatureCollection Instructions) {
             this.RouteObj = RouteObj;
-
-
-            if (instructions)
-            {
-                rawInstructions = RouteObj.GenerateInstructions(Languages.GetLanguage(language));
-                rawInstructions = rawInstructions.makeContinuous(RouteObj);
-                rawInstructions = rawInstructions.simplify(RouteObj);
-                if (colourCorrection)
-                {
-                    RouteObj.correctColours(rawInstructions);
-                }
-                Instructions = rawInstructions.ToGeoJsonCollection(RouteObj);
-            }
-
+            this.Instructions = Instructions;
 
             Route = JObject.Parse (RouteObj.ToGeoJson ());
         }

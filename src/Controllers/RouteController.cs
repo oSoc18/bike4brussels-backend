@@ -21,22 +21,23 @@ namespace rideaway_backend.Controllers {
         /// <param name="loc1">The starting point of the route.</param>
         /// <param name="loc2">The ending point of the route.</param>
         /// <param name="profile">The routing profile to use.</param>
-        /// <param name="instructions">Return instructions or not.</param>
+        /// <param name="genInstructions">Return instructions or not.</param>
         /// <param name="lang">Language of the instructions.</param>
         /// <returns>JSON result with geoJSON featurecollection representing the route.</returns>
         [HttpGet]
         [EnableCors ("AllowAnyOrigin")]
-        public ActionResult Get (string loc1, string loc2, string profile = "", bool instructions = true, string lang = "en") {
+        public ActionResult Get (string loc1, string loc2, string profile = "", bool genInstructions = true, string lang = "en") {
             try {
                 Coordinate from = Utility.ParseCoordinate (loc1);
                 Coordinate to = Utility.ParseCoordinate (loc2);
                 Route route = RouterInstance.Calculate (profile, from, to);
-
-                if (profile == "brussels") {
-                    RequestLogger.LogRequest (from, to);
-                    return Json (new RouteResponse (route, true, instructions, lang));
+                GeoJsonFeatureCollection instructions = null;
+                if(genInstructions){
+                    instructions = RouterInstance.GenerateInstructions(route, lang);
                 }
-                return Json (new RouteResponse (route, false, instructions, lang));
+
+                RequestLogger.LogRequest (from, to);
+                return Json (new RouteResponse (route, instructions));
 
             } catch (ResolveException re) {
                 return NotFound (re.Message);
