@@ -1,4 +1,4 @@
---[[
+﻿--[[
 	Lua configuration file for the profiles used when routing, defines properties,
 	preprocessing actions, routing behaviour and instruction generation.
 --]]
@@ -332,7 +332,7 @@ function factor_and_speed_relaxed (attributes, result)
     result.factor = 1.0 / (result.speed / 3.6)
     local relaxed_factor = bicycle_relaxed_factors_highway[attributes.highway]
     relaxed_factor = relaxed_factor * bicycle_relaxed_factors_surface[attributes.surface]
-    relaxed_factor = relaxed_factor * bicycle_relaxed_factors_parking[attributes.parking:lane]
+    -- relaxed_factor = relaxed_factor * bicycle_relaxed_factors_parking[attributes.parking:lane]
     if relaxed_factor != nil then
         result.factor = result.factor / relaxed_factor
     end
