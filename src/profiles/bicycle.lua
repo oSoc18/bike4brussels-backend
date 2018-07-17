@@ -337,6 +337,7 @@ function factor_and_speed_relaxed (attributes, result)
     local surface_factor = bicycle_relaxed_factors_surface[attributes.surface]
     if surface_factor ~= nil then
         relaxed_factor = relaxed_factor * surface_factor
+    end
     -- relaxed_factor = relaxed_factor * bicycle_relaxed_factors_parking[attributes.parking:lane]
     
     result.factor = result.factor / relaxed_factor
