@@ -65,7 +65,7 @@ profile_whitelist = {
 	"cyclecolour",
     "surface",
     "railway",
-    "parking:lane"
+    --"parking:lane"
 }
 
 -- Tags of the osm data to add to the metadata in the routerdb
@@ -105,8 +105,8 @@ profiles = {
 		metric = "custom"
 	},
     {
-        name = "relaxed"
-        function_name = "factor_and_speed_relaxed"
+        name = "relaxed",
+        function_name = "factor_and_speed_relaxed",
         metric = "custom"
     }
 }
@@ -124,10 +124,10 @@ function relation_tag_processor (attributes, result)
 		attributes.operator == "Brussels Mobility" then
 		result.attributes_to_keep.brussels = "yes"
 	end
-	if attributes.colour != nil and result.attributes_to_keep.brussels == "yes" then
+	if attributes.colour ~= nil and result.attributes_to_keep.brussels == "yes" then
 		result.attributes_to_keep.cyclecolour = attributes.colour
 	end
-	if attributes.ref != nil and result.attributes_to_keep.brussels == "yes" then
+	if attributes.ref ~= nil and result.attributes_to_keep.brussels == "yes" then
 		result.attributes_to_keep.cycleref = attributes.ref
 	end
 	if attributes.type == "route" and
@@ -148,7 +148,7 @@ end
 function can_access (attributes, result)
 	local last_access = nil
 	local access = access_values[attributes.access]
-	if access != nil then
+	if access ~= nil then
 		result.attributes_to_keep.access = true
 		last_access = access
 	end
@@ -157,7 +157,7 @@ function can_access (attributes, result)
 		local access_key = attributes[access_key_key]
 		if access_key then
 			access = access_values[access_key]
-			if access != nil then
+			if access ~= nil then
 				result.attributes_to_keep[access_key_key] = true
 				last_access = access
 			end
@@ -169,7 +169,7 @@ end
 -- turns a oneway tag value into a direction
 function is_oneway (attributes, name)
 	local oneway = attributes[name]
-	if oneway != nil then
+	if oneway ~= nil then
 		if oneway == "yes" or
 		   oneway == "true" or
 		   oneway == "1" then
@@ -212,7 +212,7 @@ function factor_and_speed (attributes, result)
 	 end
 
 	 local access = can_access (attributes, result)
-	 if access != nil then
+	 if access ~= nil then
 		result.access = access
 	 end
 
@@ -231,12 +231,12 @@ function factor_and_speed (attributes, result)
 		result.attributes_to_keep.junction = true
 	end
 	local direction = is_oneway (attributes, "oneway")
-	if direction != nil then
+	if direction ~= nil then
 		result.direction = direction
 		result.attributes_to_keep.oneway = true
 	end
 	direction = is_oneway (attributes, "oneway:bicycle")
-	if direction != nil then
+	if direction ~= nil then
 		result.direction = direction
 		result.attributes_to_keep["oneway:bicycle"] = true
 	end
@@ -274,7 +274,7 @@ function factor_and_speed_balanced (attributes, result)
 
 	result.factor = 1.0 / (result.speed / 3.6)
 	local balanced_factor = bicycle_balanced_factors[attributes.highway]
-	if balanced_factor != nil then
+	if balanced_factor ~= nil then
 		result.factor = result.factor / balanced_factor
 	end
 
@@ -333,7 +333,7 @@ function factor_and_speed_relaxed (attributes, result)
     local relaxed_factor = bicycle_relaxed_factors_highway[attributes.highway]
     relaxed_factor = relaxed_factor * bicycle_relaxed_factors_surface[attributes.surface]
     -- relaxed_factor = relaxed_factor * bicycle_relaxed_factors_parking[attributes.parking:lane]
-    if relaxed_factor != nil then
+    if relaxed_factor ~= nil then
         result.factor = result.factor / relaxed_factor
     end
 
