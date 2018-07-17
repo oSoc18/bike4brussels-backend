@@ -65,7 +65,8 @@ profile_whitelist = {
 	"cyclecolour",
     "surface",
     "railway",
-    -- "parking:lane"
+    "parking:lane:both",
+    "parking:lane:right"
 }
 
 -- Tags of the osm data to add to the metadata in the routerdb
@@ -338,8 +339,15 @@ function factor_and_speed_relaxed (attributes, result)
     if surface_factor ~= nil then
         relaxed_factor = relaxed_factor * surface_factor
     end
-    -- relaxed_factor = relaxed_factor * bicycle_relaxed_factors_parking[attributes.parking:lane]
-    
+    local parking_factor = bicycle_relaxed_factors_parking[attributes["parking:lane:both"]]
+    if parking_factor ~= nil then
+        relaxed_factor = relaxed_factor * parking_factor
+    end
+    local parking_factor = bicycle_relaxed_factors_parking[attributes["parking:lane:right"]]
+    if parking_factor ~= nil then
+        relaxed_factor = relaxed_factor * parking_factor
+    end
+
     result.factor = result.factor / relaxed_factor
 
 end
