@@ -1,5 +1,5 @@
 --[[
-	Lua configuration file for the profiles used when routing, defines properties, 
+	Lua configuration file for the profiles used when routing, defines properties,
 	preprocessing actions, routing behaviour and instruction generation.
 --]]
 
@@ -56,13 +56,16 @@ profile_whitelist = {
 	"access",
 	"maxspeed",
 	"roundabout",
-	"cycleway", 
+	"cycleway",
 	"cyclenetwork",
 	"brussels",
 	"oneway:bicycle",
 	"operator",
 	"cycleref",
-	"cyclecolour"
+	"cyclecolour",
+    "surface",
+    "railway",
+    "parking:lane"
 }
 
 -- Tags of the osm data to add to the metadata in the routerdb
@@ -81,26 +84,31 @@ profiles = {
 		function_name = "factor_and_speed",
 		metric = "time"
 	},
-	{ 
+	{
 		name = "shortest",
 		function_name = "factor_and_speed",
 		metric = "distance"
 	},
-	{ 
+	{
 		name = "balanced",
 		function_name = "factor_and_speed_balanced",
 		metric = "custom"
 	},
-	{ 
+	{
 		name = "networks",
 		function_name = "factor_and_speed_networks",
 		metric = "custom"
 	},
-	{ 
+	{
 		name = "brussels",
 		function_name = "factor_and_speed_networks_brussels",
 		metric = "custom"
-	}
+	},
+    {
+        name = "relaxed"
+        function_name = "factor_and_speed_relaxed"
+        metric = "custom"
+    }
 }
 
 -- Processes relation and adds the attributes_to_keep to the child ways for use in routing
@@ -124,7 +132,7 @@ function relation_tag_processor (attributes, result)
 	end
 	if attributes.type == "route" and
 	   attributes.route == "bicycle" then
-		result.attributes_to_keep.cyclenetwork = "yes"		
+		result.attributes_to_keep.cyclenetwork = "yes"
 	end
 end
 
@@ -162,8 +170,8 @@ end
 function is_oneway (attributes, name)
 	local oneway = attributes[name]
 	if oneway != nil then
-		if oneway == "yes" or 
-		   oneway == "true" or 
+		if oneway == "yes" or
+		   oneway == "true" or
 		   oneway == "1" then
 			return 1
 		end
@@ -179,7 +187,7 @@ end
 
 function factor_and_speed (attributes, result)
 	 local highway = attributes.highway
-	 
+
 	 result.speed = 0
 	 result.direction = 0
 	 result.canstop = true
@@ -215,7 +223,7 @@ function factor_and_speed (attributes, result)
 		result.canstop = true
 		return
 	 end
-	 
+
 	-- get directional information
 	local junction = attributes.junction
 	if junction == "roundabout" then
@@ -239,7 +247,7 @@ avoid_factor = 0.9
 prefer_factor = 1.1
 highest_prefer_factor = 1.2
 
--- multiplication factors per classification
+-- multiplication factors per classification (balanced)
 bicycle_balanced_factors = {
 	["primary"] = highest_avoid_factor,
 	["primary_link"] = highest_avoid_factor,
@@ -272,8 +280,69 @@ function factor_and_speed_balanced (attributes, result)
 
 end
 
+-- multiplication factors per classification (relaxed)
+bicycle_relaxed_factors_highway = {
+    ["primary"] = highest_avoid_factor,
+    ["primary_link"] = highest_avoid_factor,
+    ["secondary"] = highest_avoid_factor,
+    ["secondary_link"] = highest_avoid_factor,
+    ["tertiary"] = avoid_factor,
+    ["tertiary_link"] = avoid_factor,
+    ["residential"] = 1,
+    ["path"] = highest_prefer_factor,
+    ["cycleway"] = highest_prefer_factor,
+    ["footway"] = prefer_factor,
+    ["pedestrian"] = prefer_factor,
+    ["steps"] = avoid_factor,
+    ["track"] = 1,
+    ["living_street"] = 1
+}
+
+bicycle_relaxed_factors_surface = {
+    ["paving_stones"] = avoid_factor,
+    ["sett"] = avoid_factor,
+    ["cobblestone"] = avoid_factor,
+    ["gravel"] = avoid_factor,
+    ["pebblestone"] = avoid_factor,
+    ["unpaved"] = avoid_factor,
+    ["ground"] = avoid_factor,
+    ["dirt"] = highest_avoid_factor,
+    ["grass"] = highest_avoid_factor,
+    ["sand"] = highest_avoid_factor,
+    ["paved"] = 1,
+    ["asphalt"] = 1,
+    ["concrete"] = 1,
+    ["fine_gravel"] = 1,
+    ["compacted"] = 1
+}
+
+bicycle_relaxed_factors_parking = {
+    ["parallel"] = avoid_factor
+}
+
+-- the factor function for the factor profile (relaxed)
+function factor_and_speed_relaxed (attributes, result)
+
+    factor_and_speed (attributes, result)
+
+    if result.speed == 0 then
+        return
+    end
+
+    result.factor = 1.0 / (result.speed / 3.6)
+    local relaxed_factor = bicycle_relaxed_factors_highway[attributes.highway]
+    relaxed_factor = relaxed_factor * bicycle_relaxed_factors_surface[attributes.surface]
+    relaxed_factor = relaxed_factor * bicycle_relaxed_factors_parking[attributes.parking:lane]
+    if relaxed_factor != nil then
+        result.factor = result.factor / relaxed_factor
+    end
+
+end
+
+
+
 function factor_and_speed_networks (attributes, result)
-	
+
 	factor_and_speed_balanced (attributes, result)
 
 	if result.speed == 0 then
@@ -310,7 +379,7 @@ instruction_generators = {
 				name = "start",
 				function_name = "get_start"
 			},
-			{ 
+			{
 				name = "stop",
 				function_name = "get_stop"
 			},
@@ -338,7 +407,7 @@ function get_start (route_position, language_reference, instruction)
 end
 
 -- gets the last instruction
-function get_stop (route_position, language_reference, instruction) 
+function get_stop (route_position, language_reference, instruction)
 	if route_position.is_last() then
 		instruction.text = language_reference.get("Arrived at destination.");
 		instruction.shape = route_position.shape
@@ -350,11 +419,11 @@ end
 function contains (attributes, key, value)
 	if attributes then
 		return localvalue == attributes[key];
-	end	
+	end
 end
 
 -- gets a roundabout instruction
-function get_roundabout (route_position, language_reference, instruction) 
+function get_roundabout (route_position, language_reference, instruction)
 	if route_position.attributes.junction == "roundabout" and
 		(not route_position.is_last()) then
 		local attributes = route_position.next().attributes
@@ -392,10 +461,10 @@ function get_roundabout (route_position, language_reference, instruction)
 end
 
 --[[
-	Generates an instrutions every time the reference of the road changes and
+	Generates an instruction every time the reference of the road changes and
 	every time you leave or enter the cyclenetwork.
 --]]
-function get_turn (route_position, language_reference, instruction) 
+function get_turn (route_position, language_reference, instruction)
 	local relative_direction = route_position.relative_direction().direction
 
 	local turn_relevant = false
@@ -404,9 +473,9 @@ function get_turn (route_position, language_reference, instruction)
 	local ref = route_position.attributes.cycleref
 	local cyclenetwork = route_position.attributes.brussels
 	local next_cyclenetwork = nil
-	local next_ref = nil
+	local next_ref;
 	local next = route_position.next()
-	
+
 	if next then
 		 next_cyclenetwork = next.attributes.brussels
 		 next_ref = next.attributes.cycleref
@@ -421,55 +490,53 @@ function get_turn (route_position, language_reference, instruction)
 			turn_relevant = true
 		elseif not cyclenetwork and next_cyclenetwork then
 			turn_relevant = true
-		end	
+		end
 	end
 
 	-- Set the properties of the instruction
 	if turn_relevant then
 		local name = nil
-		
+
 		if next then
 			name = next.attributes.name
-		else
-			name = route_position.attributes.name
 		end
-		if cyclenetwork then 
+		if cyclenetwork then
 			if next_cyclenetwork then
 				if next_ref then
-					instruction.text = itinero.format(language_reference.get("Go {0} on the {1} route."), 
+					instruction.text = itinero.format(language_reference.get("Go {0} on the {1} route."),
 					language_reference.get(relative_direction), next_ref)
 				else
-					instruction.text = itinero.format(language_reference.get("Go {0}."), 
+					instruction.text = itinero.format(language_reference.get("Go {0}."),
 					language_reference.get(relative_direction))
 				end
-				
+
 			else
 				if name then
-					instruction.text = itinero.format(language_reference.get("Go {0} and leave the cyclenetwork on {1}."), 
+					instruction.text = itinero.format(language_reference.get("Go {0} and leave the cyclenetwork on {1}."),
 					language_reference.get(relative_direction), name)
 				else
-					instruction.text = itinero.format(language_reference.get("Go {0} and leave the cyclenetwork."), 
+					instruction.text = itinero.format(language_reference.get("Go {0} and leave the cyclenetwork."),
 					language_reference.get(relative_direction))
 				end
-				
+
 			end
 		else
 			if next_cyclenetwork then
 				if next_ref then
-					instruction.text = itinero.format(language_reference.get("Go {0} and enter the cyclenetwork on the {1} route."), 
+					instruction.text = itinero.format(language_reference.get("Go {0} and enter the cyclenetwork on the {1} route."),
 					language_reference.get(relative_direction), next_ref)
 				else
-					instruction.text = itinero.format(language_reference.get("Go {0} and enter the cyclenetwork."), 
+					instruction.text = itinero.format(language_reference.get("Go {0} and enter the cyclenetwork."),
 					language_reference.get(relative_direction))
 				end
-				
+
 			else
 				if name then
-					instruction.text = itinero.format(language_reference.get("Go {0} on {1}."), 
-					language_reference.get(relative_direction), name)
+					instruction.text = itinero.format(language_reference.get("Go {0} on {1}."),
+						language_reference.get(relative_direction), name)
 				else
-					instruction.text = itinero.format(language_reference.get("Go {0}."), 
-					language_reference.get(relative_direction))
+					instruction.text = itinero.format(language_reference.get("Go {0}."),
+						language_reference.get(relative_direction))
 				end
 			end
 		end
@@ -478,4 +545,4 @@ function get_turn (route_position, language_reference, instruction)
 		return 1
 	end
 	return 0
-end	
+end
