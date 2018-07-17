@@ -299,6 +299,16 @@ bicycle_relaxed_factors_highway = {
     ["living_street"] = 1
 }
 
+bicycle_relaxed_factors_cycleway = {
+    ["lane"] = prefer_factor,
+    ["track"] = highest_prefer_factor,
+    ["shared_lane"] = prefer_factor,
+    ["opposite_lane"] = prefer_factor,
+    ["share_busway"] = highest_prefer_factor,
+    ["opposite_track"] = highest_prefer_factor,
+    ["opposite"] = prefer_factor
+}
+
 bicycle_relaxed_factors_surface = {
     ["paving_stones"] = avoid_factor,
     ["sett"] = avoid_factor,
@@ -346,6 +356,10 @@ function factor_and_speed_relaxed (attributes, result)
     local parking_factor = bicycle_relaxed_factors_parking[attributes["parking:lane:right"]]
     if parking_factor ~= nil then
         relaxed_factor = relaxed_factor * parking_factor
+    end
+    local cycleway_factor = bicycle_relaxed_factors_cycleway[attributes["cycleway"]]
+    if cycleway_factor ~= nil then
+        relaxed_factor = relaxed_factor * cycleway_factor
     end
 
     result.factor = result.factor / relaxed_factor
