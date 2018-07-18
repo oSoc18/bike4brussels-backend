@@ -57,6 +57,8 @@ profile_whitelist = {
 	"maxspeed",
 	"roundabout",
 	"cycleway",
+    "cycleway:left",
+    "cycleway:right",
 	"cyclenetwork",
 	"brussels",
 	"oneway:bicycle",
@@ -252,15 +254,15 @@ highest_prefer_factor = 1.2
 bicycle_balanced_factors = {
 	["primary"] = highest_avoid_factor,
 	["primary_link"] = highest_avoid_factor,
-	["secondary"] = highest_avoid_factor,
-	["secondary_link"] = highest_avoid_factor,
+	["secondary"] = avoid_factor,
+	["secondary_link"] = avoid_factor,
 	["tertiary"] = avoid_factor,
 	["tertiary_link"] = avoid_factor,
 	["residential"] = 1,
 	["path"] = highest_prefer_factor,
 	["cycleway"] = highest_prefer_factor,
 	["footway"] = prefer_factor,
-	["pedestrian"] = prefer_factor,
+	["pedestrian"] = avoid_factor,
 	["steps"] = prefer_factor
 }
 
@@ -293,7 +295,7 @@ bicycle_relaxed_factors_highway = {
     ["path"] = highest_prefer_factor,
     ["cycleway"] = highest_prefer_factor,
     ["footway"] = prefer_factor,
-    ["pedestrian"] = prefer_factor,
+    ["pedestrian"] = 1,
     ["steps"] = avoid_factor,
     ["track"] = 1,
     ["living_street"] = 1
@@ -353,13 +355,15 @@ function factor_and_speed_relaxed (attributes, result)
     if parking_factor ~= nil then
         relaxed_factor = relaxed_factor * parking_factor
     end
-    local parking_factor = bicycle_relaxed_factors_parking[attributes["parking:lane:right"]]
-    if parking_factor ~= nil then
-        relaxed_factor = relaxed_factor * parking_factor
-    end
+
     local cycleway_factor = bicycle_relaxed_factors_cycleway[attributes["cycleway"]]
     if cycleway_factor ~= nil then
         relaxed_factor = relaxed_factor * cycleway_factor
+    end
+    local cycleway_left_factor = bicycle_relaxed_factors_cycleway[attributes["cycleway:left"]]
+    local cycleway_right_factor = bicycle_relaxed_factors_cycleway[attributes["cycleway:right"]]
+    if cycleway_left_factor ~= nil and cycleway_right_factor ~= nil then
+        relaxed_factor = relaxed_factor * (cycleway_right_factor - 0.1) * (cycleway_left_factor - 0.1)
     end
 
     result.factor = result.factor / relaxed_factor
