@@ -97,11 +97,13 @@ profiles = {
 		function_name = "factor_and_speed_balanced",
 		metric = "custom"
 	},
+--[[
 	{
 		name = "networks",
 		function_name = "factor_and_speed_networks",
 		metric = "custom"
 	},
+--]]
 	{
 		name = "brussels",
 		function_name = "factor_and_speed_networks_brussels",
