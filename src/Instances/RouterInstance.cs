@@ -102,7 +102,9 @@ namespace rideaway_backend.Instance
             rawInstructions = RouteObj.GenerateInstructions(routerDb, Languages.GetLanguage(language));
             rawInstructions = rawInstructions.makeContinuous(RouteObj);
             rawInstructions = rawInstructions.simplify(RouteObj);
-            RouteObj.correctColours(rawInstructions);
+            try{
+                RouteObj.correctColours(rawInstructions);
+            } catch {} // If the collourcorrection fails, return the route anyway
             return rawInstructions.ToGeoJsonCollection(RouteObj);
         }
     }
