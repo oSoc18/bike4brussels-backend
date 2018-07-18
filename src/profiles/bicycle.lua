@@ -341,25 +341,28 @@ function factor_and_speed_relaxed (attributes, result)
     if result.speed == 0 then
         return
     end
-
+-- considers the highway key and its tag weights 
     result.factor = 1.0 / (result.speed / 3.6)
     local relaxed_factor = bicycle_relaxed_factors_highway[attributes.highway]
     if relaxed_factor == nil then
         relaxed_factor = 1;
     end
+-- considers the surface key and its tag weights
     local surface_factor = bicycle_relaxed_factors_surface[attributes.surface]
     if surface_factor ~= nil then
         relaxed_factor = relaxed_factor * surface_factor
     end
+-- considers the parking:lane:both key and its tag weights
     local parking_factor = bicycle_relaxed_factors_parking[attributes["parking:lane:both"]]
     if parking_factor ~= nil then
         relaxed_factor = relaxed_factor * parking_factor
     end
-
+-- considers the cycleway key and its tag weights
     local cycleway_factor = bicycle_relaxed_factors_cycleway[attributes["cycleway"]]
     if cycleway_factor ~= nil then
         relaxed_factor = relaxed_factor * cycleway_factor
     end
+-- considers the cycleway:left and cycleway:right keys together and the cycleway tag weights
     local cycleway_left_factor = bicycle_relaxed_factors_cycleway[attributes["cycleway:left"]]
     local cycleway_right_factor = bicycle_relaxed_factors_cycleway[attributes["cycleway:right"]]
     if cycleway_left_factor ~= nil and cycleway_right_factor ~= nil then
