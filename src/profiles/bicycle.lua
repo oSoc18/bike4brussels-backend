@@ -256,14 +256,24 @@ bicycle_balanced_factors = {
 	["primary_link"] = highest_avoid_factor,
 	["secondary"] = avoid_factor,
 	["secondary_link"] = avoid_factor,
-	["tertiary"] = avoid_factor,
-	["tertiary_link"] = avoid_factor,
+	["tertiary"] = 1,
+	["tertiary_link"] = 1,
 	["residential"] = 1,
-	["path"] = highest_prefer_factor,
-	["cycleway"] = highest_prefer_factor,
+	["path"] = prefer_factor,
+	["cycleway"] = prefer_factor,
 	["footway"] = prefer_factor,
 	["pedestrian"] = avoid_factor,
-	["steps"] = prefer_factor
+	["steps"] = avoid_factor
+}
+
+bicycle_balanced_factors_cycleway = {
+    ["lane"] = prefer_factor,
+    ["track"] = prefer_factor,
+    ["shared_lane"] = prefer_factor,
+    ["opposite_lane"] = prefer_factor,
+    ["share_busway"] = prefer_factor,
+    ["opposite_track"] = prefer_factor,
+    ["opposite"] = prefer_factor
 }
 
 -- the factor function for the factor profile
@@ -280,6 +290,17 @@ function factor_and_speed_balanced (attributes, result)
 	if balanced_factor ~= nil then
 		result.factor = result.factor / balanced_factor
 	end
+-- considers the cycleway key and its tag weights
+    local cycleway_factor = bicycle_balanced_factors_cycleway[attributes["cycleway"]]
+    if cycleway_factor ~= nil then
+        balanced_factor = balanced_factor * cycleway_factor
+    end
+-- considers the cycleway:left and cycleway:right keys together and the cycleway tag weights
+    local cycleway_left_factor = bicycle_balanced_factors_cycleway[attributes["cycleway:left"]]
+    local cycleway_right_factor = bicycle_balanced_factors_cycleway[attributes["cycleway:right"]]
+    if cycleway_left_factor ~= nil and cycleway_right_factor ~= nil then
+        balanced_factor = balanced_factor * (cycleway_right_factor - 0.1) * (cycleway_left_factor - 0.1)
+    end
 
 end
 
@@ -296,7 +317,7 @@ bicycle_relaxed_factors_highway = {
     ["cycleway"] = highest_prefer_factor,
     ["footway"] = prefer_factor,
     ["pedestrian"] = 1,
-    ["steps"] = avoid_factor,
+    ["steps"] = 1,
     ["track"] = 1,
     ["living_street"] = 1
 }
@@ -341,7 +362,7 @@ function factor_and_speed_relaxed (attributes, result)
     if result.speed == 0 then
         return
     end
--- considers the highway key and its tag weights 
+-- considers the highway key and its tag weights
     result.factor = 1.0 / (result.speed / 3.6)
     local relaxed_factor = bicycle_relaxed_factors_highway[attributes.highway]
     if relaxed_factor == nil then
@@ -374,7 +395,7 @@ function factor_and_speed_relaxed (attributes, result)
 end
 
 
-
+--[[
 function factor_and_speed_networks (attributes, result)
 
 	factor_and_speed_balanced (attributes, result)
@@ -388,7 +409,7 @@ function factor_and_speed_networks (attributes, result)
 	end
 
 end
-
+--]]
 --[[
 	Function to calculate the factor of an edge in the graph when routing.
 	If the edge is part of the brussels mobility network, favor it by a factor of 3.
