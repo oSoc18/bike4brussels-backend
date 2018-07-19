@@ -518,87 +518,43 @@ function get_roundabout (route_position, language_reference, instruction)
 	return 0
 end
 
---[[
-	Generates an instruction every time the reference of the road changes and
-	every time you leave or enter the cyclenetwork.
---]]
+-- gets a turn
 function get_turn (route_position, language_reference, instruction)
 	local relative_direction = route_position.relative_direction().direction
 
 	local turn_relevant = false
 	local branches = route_position.branches
-
-	local ref = route_position.attributes.cycleref
-	local cyclenetwork = route_position.attributes.brussels
-	local next_cyclenetwork = nil
-	local next_ref;
-	local next = route_position.next()
-
-	if next then
-		 next_cyclenetwork = next.attributes.brussels
-		 next_ref = next.attributes.cycleref
-	end
-
-	-- Checks if an instruction has to be generated.
-	if branches and cyclenetwork and next_cyclenetwork and ref ~= next_ref then
-		turn_relevant = true
-	end
 	if branches then
-		if cyclenetwork and not next_cyclenetwork then
-			turn_relevant = true
-		elseif not cyclenetwork and next_cyclenetwork then
-			turn_relevant = true
+		branches = branches.get_traversable()
+		if relative_direction == "straighton" and
+			branches.count >= 2 then
+			turn_relevant = true -- straight on at cross road
+		end
+		if  relative_direction != "straighton" and
+			branches.count > 0 then
+			turn_relevant = true -- an actual normal turn
 		end
 	end
 
-	-- Set the properties of the instruction
-	if turn_relevant then
-		local name = nil
+	if relative_direction == "unknown" then
+		turn_relevant = false -- turn could not be calculated.
+	end
 
+	if turn_relevant then
+		local next = route_position.next()
+		local name = nil
 		if next then
 			name = next.attributes.name
 		end
-		if cyclenetwork then
-			if next_cyclenetwork then
-				if next_ref then
-					instruction.text = itinero.format(language_reference.get("Go {0} on the {1} route."),
-					language_reference.get(relative_direction), next_ref)
-				else
-					instruction.text = itinero.format(language_reference.get("Go {0}."),
-					language_reference.get(relative_direction))
-				end
-
-			else
-				if name then
-					instruction.text = itinero.format(language_reference.get("Go {0} and leave the cyclenetwork on {1}."),
-					language_reference.get(relative_direction), name)
-				else
-					instruction.text = itinero.format(language_reference.get("Go {0} and leave the cyclenetwork."),
-					language_reference.get(relative_direction))
-				end
-
-			end
+		if name then
+			instruction.text = itinero.format(language_reference.get("Go {0} on {1}."),
+				language_reference.get(relative_direction), name)
+			instruction.shape = route_position.shape
 		else
-			if next_cyclenetwork then
-				if next_ref then
-					instruction.text = itinero.format(language_reference.get("Go {0} and enter the cyclenetwork on the {1} route."),
-					language_reference.get(relative_direction), next_ref)
-				else
-					instruction.text = itinero.format(language_reference.get("Go {0} and enter the cyclenetwork."),
-					language_reference.get(relative_direction))
-				end
-
-			else
-				if name then
-					instruction.text = itinero.format(language_reference.get("Go {0} on {1}."),
-						language_reference.get(relative_direction), name)
-				else
-					instruction.text = itinero.format(language_reference.get("Go {0}."),
-						language_reference.get(relative_direction))
-				end
-			end
+			instruction.text = itinero.format(language_reference.get("Go {0}."),
+				language_reference.get(relative_direction))
+			instruction.shape = route_position.shape
 		end
-		instruction.shape = route_position.shape
 
 		return 1
 	end
