@@ -33,7 +33,9 @@ namespace rideaway_backend.Controllers {
                 Route route = RouterInstance.Calculate (profile, from, to);
                 GeoJsonFeatureCollection instructions = null;
                 if(genInstructions){
-                    instructions = RouterInstance.GenerateInstructions(route, lang);
+                    try {
+                        instructions = RouterInstance.GenerateInstructions(route, lang);
+                    } catch {}
                 }
 
                 RequestLogger.LogRequest (from, to);
