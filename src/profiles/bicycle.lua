@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 	Lua configuration file for the profiles used when routing, defines properties,
 	preprocessing actions, routing behaviour and instruction generation.
 --]]
@@ -97,8 +97,7 @@ profiles = {
 		function_name = "factor_and_speed_balanced",
 		metric = "custom"
 	},
---[[
-	{
+--[[	{
 		name = "networks",
 		function_name = "factor_and_speed_networks",
 		metric = "custom"
@@ -291,6 +290,8 @@ function factor_and_speed_balanced (attributes, result)
 	local balanced_factor = bicycle_balanced_factors[attributes.highway]
 	if balanced_factor ~= nil then
 		result.factor = result.factor / balanced_factor
+	else
+		balanced_factor = 1
 	end
 -- considers the cycleway key and its tag weights
     local cycleway_factor = bicycle_balanced_factors_cycleway[attributes["cycleway"]]
