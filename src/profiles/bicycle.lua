@@ -24,8 +24,8 @@ speed_profile = {
 	["road"] = { speed = 15, access = true },
 	["track"] = { speed = 15, access = true },
 	["cycleway"] = { speed = 15, access = true },
-	["footway"] = { speed = 15, access = false },
-	["pedestrian"] = { speed = 15, access = false },
+	["footway"] = { speed = 15, access = true },
+	["pedestrian"] = { speed = 15, access = true },
 	["path"] = { speed = 15, access = true },
 	["living_street"] = { speed = 15, access = true },
 	["ferry"] = { speed = 15, access = true },
@@ -318,7 +318,7 @@ bicycle_relaxed_factors_highway = {
     ["residential"] = 1,
     ["path"] = highest_prefer_factor,
     ["cycleway"] = highest_prefer_factor,
-    ["footway"] = prefer_factor,
+    ["footway"] = highest_prefer_factor,
     ["pedestrian"] = 1,
     ["steps"] = 1,
     ["track"] = 1,
@@ -346,6 +346,7 @@ bicycle_relaxed_factors_surface = {
     ["dirt"] = highest_avoid_factor,
     ["grass"] = highest_avoid_factor,
     ["sand"] = highest_avoid_factor,
+    ["metal"] = 1,
     ["paved"] = 1,
     ["asphalt"] = 1,
     ["concrete"] = 1,
@@ -357,6 +358,12 @@ bicycle_relaxed_factors_parking = {
     ["parallel"] = avoid_factor
 }
 
+--[[
+bicycle_relaxed_factors_bicycle = {
+    ["yes"] = prefer_factor,
+    ["no"] = 0
+}
+--]]
 -- the factor function for the factor profile (relaxed)
 function factor_and_speed_relaxed (attributes, result)
 
