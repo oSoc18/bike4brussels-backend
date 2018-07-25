@@ -1,10 +1,10 @@
-# rideaway-backend(v 2.0.2)
+# rideaway-backend (v 2.0.2)
 
-Backend for rideaway: a bicycle navigation application. Provides a routing endpoint where you can provide two coordinates to get the route between these points. Different routing profiles can be used to get different routing behavior and there is support for route instructions. Also provides an endpoint to request bicycle parkings in a certain radius around a location.
+Backend for bike4brussels: routeplanner application. Provides a routing endpoint where you can provide two coordinates to get the route between these points. Different routing profiles can be used to get different routing behavior and there is support for route instructions. ~~Also provides an endpoint to request bicycle parkings in a certain radius around a location.~~  => Was not used (it's still there, but no guarantees)
 
-For all requests over the brussels cycle network timestamps, starting location and ending location are saved in the csv file corresponding with the date, which is available from `hostname/requests/data`.
+Timestamps, starting location and ending location are saved for each request in the csv file corresponding with the date ~~, which is available from `hostname/requests/data`.~~
 
-There is also a script included in `src/scripts` to extract a geojson file of the routes in the Brussels network. This is adapted from https://github.com/oSoc17/rideaway-data. This file can then be accessed via `hostname/routes/network.geojson`.
+~~There is also a script included in `src/scripts` to extract a geojson file of the routes in the Brussels network. This is adapted from https://github.com/oSoc17/rideaway-data. This file can then be accessed via `hostname/routes/network.geojson`.~~ => Was not used (it's still there, but no guarantees)
 
 The backend uses the open source routing library [Itinero](https://github.com/itinero/routing) by [Ben Abelshausen](https://github.com/xivk).
 
@@ -30,7 +30,7 @@ Run `build.sh` or `build.bat` to build the application and `run.sh` or `run.bat`
 > sudo git clone https://github.com/oSoc18/bike4brussels-backend
 ```
 
-#### Downloading mapdata
+### Downloading mapdata
 The following command will download the mapdata for Belgium and process this into a routing database, using the profiles included. This takes a while.
 ```bash
 > cd /var/www/bike4brussels-backend/publish
@@ -92,7 +92,7 @@ Launch a `GET` request to `hostname/route`
 
 | profile name   | Explanation |
 |---------------:|-------------|
-| ``             | This profile minimizes the time to destination. (fast) |
+| ` `            | This profile minimizes the time to destination. (fast) |
 | `balanced`     | This profile avoids the biggest streets and prefers cycleways. |
 | `relaxed`      | This profile avoids big roads, highly prefers cycleways, avoids uncomfortable surfaces such as cobblestones, and avoids streets with parallel parked cars. |
 | `brussels`     | This profile heavily prefers the Brussels cycle network. |
