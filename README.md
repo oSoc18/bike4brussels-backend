@@ -16,6 +16,69 @@ To build the application, make sure you have the .NET Core library installed: ht
 
 Run `build.sh` or `build.bat` to build the application and `run.sh` or `run.bat` to run the application. The Api will start on http://localhost:5000.
 
+## Deployment
+
+### Preparing directories
+```bash
+> sudo mkdir /var/www
+> sudo mkdir /var/www/bike4brussels-backend
+```
+
+### Downloading backend
+```bash
+> cd /var/www/bike4brussels-backend
+> sudo git clone https://github.com/oSoc18/bike4brussels-backend
+```
+
+#### Downloading mapdata
+The following command will download the mapdata for Belgium and process this into a routing database, using the profiles included. This takes a while.
+```bash
+> cd /var/www/bike4brussels-backend/publish
+> sudo ./fetch_osm_data.sh
+```
+
+### Build and publish the dotnet application
+The included script builds, publishes and puts all the files in the correct folder.
+```bash
+> cd /var/www/bike4brussels-backend/bike4brussels-backend
+> sudo ./deploy_project_SERVER_ONLY.sh
+```
+
+### Setting up a deamon to run the backend
+```bash
+> sudo useradd -s /sbin/nologin dotnetuser
+> sudo chown -R dotnetuser:dotnetuser /var/www/bike4brussels-backend/publish
+> sudo nano /etc/systemd/system/b4b-backend.service
+```
+Paste
+```
+[Unit]
+Description=Backend service for bike4brussels.osm.be
+DefaultDependencies=no
+Wants=network.target # network is required
+After=network.target
+
+[Service]
+ExecStart=/var/www/bike4brussels-backend/publish/rideaway-backend
+WorkingDirectory=/var/www/bike4brussels-backend/publish
+Restart=always
+RestartSec=10 # Restart service after 10 seconds if dotnet service crashes
+SyslogIdentifier=bike4brussels-backend
+User=dotnetuser
+Group=dotnetuser
+PrivateTmp=true
+Environment=ASPNETCORE_ENVIRONMENT=Production # specify environment variable for environment
+
+[Install]
+WantedBy = multi-user.target
+```
+save and startup the service.
+
+```bash
+> sudo systemctl start b4b-backend.service
+```
+
+
 ## Api
 
 ### Get a route
@@ -26,18 +89,13 @@ Launch a `GET` request to `hostname/route`
 
 - `loc1` and `loc2`: The starting and ending coordinates of the route (example: `loc1=50.86071,4.35614`)
 - `profile`: choose a profile to do routing, possible values are:
-	- `networks`: use the bicycle networks as much as possible
-	- `balanced`: tries to select calmer streets
-	- `shortest`: the shortest route, but maybe not the most pleasant one
-	- `brussels`: use the brussels bicycle network as much as possible
-- `instructions`: Boolean to specify if you want the API to return route instructions or not (instructions are only supported on the `brussels` profile)
-- `lang`: specify the language of the instructions (supported: `en` and `nl`)
+	|profile name 	| Explanation |
+	|--------------:|-------------|
+	|``				|This profile minimizes the time to destination. (fast)|
+	|`balanced`		|This profile avoids the biggest streets and prefers cycleways.|
+	|`relaxed` 		|This profile avoids big roads, highly prefers cycleways, avoids uncomfortable surfaces such as cobblestones, and avoids streets with parallel parked cars.|
+	|`brussels`		|This profile heavily prefers the Brussels cycle network.|
+	|`networks`		|This profile uses the bicycle networks as much as possible (general).|
+- `instructions`: Boolean to specify if you want the API to return route instructions or not (instructions are currently in highly Alpha stage)
+- `lang`: specify the language of the instructions (supported: `en`, `fr` and `nl`)
 
-### Get bicycle parkings in a certain radius
-
-Launch a `GET` request to `hostname/parking`
-
-#### Parameters
-
-- `loc`: location around which the parking need to be found (example: `loc=50.86071,4.35614`)
-- `radius`: radius in meters
