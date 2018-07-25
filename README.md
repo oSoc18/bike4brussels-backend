@@ -78,6 +78,41 @@ save and startup the service.
 > sudo systemctl start b4b-backend.service
 ```
 
+### Proxy server
+To be able to handle requests at a given subpath of your website url, requests will have to be proxied. For this Nginx can be used. A possible nginx configuration file can look like this:
+```
+server {
+    listen	 80;
+    server_name  bike4brussels.osm.be;
+
+    # default redirect to frontend
+    location / {
+        root /path/to/frontend/files;
+        index index.html;
+    }
+
+    # redirect requests to /api/ to the backend (listening at port 5000)
+    location /api/ {
+        proxy_pass http://localhost:5000/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+        add_header X-Cache-Status $upstream_cache_status;
+    }
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
+```
 
 ## Api
 
