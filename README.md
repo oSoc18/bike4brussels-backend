@@ -89,13 +89,15 @@ Launch a `GET` request to `hostname/route`
 
 - `loc1` and `loc2`: The starting and ending coordinates of the route (example: `loc1=50.86071,4.35614`)
 - `profile`: choose a profile to do routing, possible values are:
-	|profile name 	| Explanation |
-	|--------------:|-------------|
-	|``				|This profile minimizes the time to destination. (fast)|
-	|`balanced`		|This profile avoids the biggest streets and prefers cycleways.|
-	|`relaxed` 		|This profile avoids big roads, highly prefers cycleways, avoids uncomfortable surfaces such as cobblestones, and avoids streets with parallel parked cars.|
-	|`brussels`		|This profile heavily prefers the Brussels cycle network.|
-	|`networks`		|This profile uses the bicycle networks as much as possible (general).|
+
+| profile name   | Explanation |
+|---------------:|-------------|
+| ``             | This profile minimizes the time to destination. (fast) |
+| `balanced`     | This profile avoids the biggest streets and prefers cycleways. |
+| `relaxed`      | This profile avoids big roads, highly prefers cycleways, avoids uncomfortable surfaces such as cobblestones, and avoids streets with parallel parked cars. |
+| `brussels`     | This profile heavily prefers the Brussels cycle network. |
+| `networks`     | This profile uses the bicycle networks as much as possible (general). |
+
 - `instructions`: Boolean to specify if you want the API to return route instructions or not (instructions are currently in highly Alpha stage)
 - `lang`: specify the language of the instructions (supported: `en`, `fr` and `nl`)
 
