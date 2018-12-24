@@ -78,6 +78,12 @@ save and startup the service.
 > sudo systemctl start b4b-backend.service
 ```
 
+and don't forget to "enable" the service, so it starts automatically at startup :
+
+```bash
+> sudo systemctl enable example-service.service
+```
+
 ### Proxy server
 To be able to handle requests at a given subpath of your website url, requests will have to be proxied. For this Nginx can be used. A possible nginx configuration file can look like this:
 ```
